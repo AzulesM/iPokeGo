@@ -3,7 +3,7 @@
 This is a client for the Pokemap server (https://github.com/PokemonGoMap/PokemonGo-Map)
 
 <img src="http://dimitridessus.fr/img/iPokeGo/screenshots/iPokeGo7.jpg" width="270" height="480"/>
-<img src="http://dimitridessus.fr/img/iPokeGo/screenshots/iPokeGo6.jpg" width="270" height="480"/>
+<img src="http://dimitridessus.fr/img/iPokeGo/screenshots/iPokeGo8.jpg" width="270" height="480"/>
 <img src="http://dimitridessus.fr/img/iPokeGo/screenshots/iPokeGo3.jpg" width="270" height="480"/>
 
 ## Features
@@ -17,6 +17,8 @@ This is a client for the Pokemap server (https://github.com/PokemonGoMap/Pokemon
 - See distance and remaining time on each pokemons.
 - Possibility to show/hide common pokemon in a list.
 - Supports [**PokemonGo-Map**](https://github.com/PokemonGoMap/PokemonGo-Map) and [**Pogom**](https://github.com/favll/pogom) server.
+- Possibility to switch between all your servers easily.
+- Wifi only mode if you run this app at your home.
 - Possibility to follow user location.
 
 ## Now with real push notification !

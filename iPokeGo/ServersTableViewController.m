@@ -14,11 +14,25 @@
 
 @implementation ServersTableViewController
 
+NSString *server_name_prefs;
+NSString *server_addr_prefs;
+NSString *server_type_prefs;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.serversPogomArray          = [[NSMutableArray alloc] init];
     self.serversPokemonGoMapArray   = [[NSMutableArray alloc] init];
+
+    [self loadCurrentServer];
+}
+
+-(void)loadCurrentServer
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    server_name_prefs = [defaults objectForKey:@"server_name"];
+    server_addr_prefs = [defaults objectForKey:@"server_addr"];
+    server_type_prefs = [defaults objectForKey:@"server_type"];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -59,18 +73,6 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // TODO: Add more flexibility with sections
-    
-    /*
-    int sections = 0;
-    if ([self.serversPokemonGoMapArray count] > 0) {
-        sections += 1;
-    }
-    
-    if ([self.serversPogomArray count] > 0) {
-        sections += 1;
-    }
-    */
     return 2;
 }
 
@@ -91,10 +93,24 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == 0 && [self.serversPokemonGoMapArray count] > 0)
         return @"PokemonGO-Map";
-    else if (section == 1)
+    else if (section == 1 && [self.serversPogomArray count] > 0)
         return @"Pogom";
+    
+    if([self.serversPokemonGoMapArray count] == 0 && [self.serversPogomArray count] == 0)
+    {
+        UILabel *noDataLabel         = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.bounds.size.width, self.tableView.bounds.size.height)];
+        noDataLabel.text             = NSLocalizedString(@"No server", nil);
+        noDataLabel.textColor        = [UIColor blackColor];
+        noDataLabel.textAlignment    = NSTextAlignmentCenter;
+        self.tableView.backgroundView = noDataLabel;
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    }
+    else
+    {
+        self.tableView.backgroundView = nil;
+    }
         
     return nil;
 }
@@ -108,16 +124,23 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ServersTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cellServer" forIndexPath:indexPath];
     
+    NSString *server_type;
+    
     if(indexPath.section == POKEMONGOMAP_TYPE)
     {
         cell.serverNameLabel.text = [self.serversPokemonGoMapArray[indexPath.row] objectForKey:@"server_name"];
         cell.serverAddrLabel.text = [self.serversPokemonGoMapArray[indexPath.row] objectForKey:@"server_addr"];
+        server_type               = SERVER_API_DATA_POKEMONGOMAP;
     }
     else
     {
         cell.serverNameLabel.text = [self.serversPogomArray[indexPath.row] objectForKey:@"server_name"];
         cell.serverAddrLabel.text = [self.serversPogomArray[indexPath.row] objectForKey:@"server_addr"];
+        server_type               = SERVER_API_DATA_POGOM;
     }
+    
+    if(([cell.serverNameLabel.text isEqualToString:server_name_prefs]) && ([cell.serverAddrLabel.text isEqualToString:server_addr_prefs]) && ([server_type_prefs isEqualToString:server_type]))
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     
     return cell;
 }
